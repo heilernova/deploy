@@ -6,8 +6,17 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { initDb } from './app/config/db-init';
 
 async function bootstrap() {
+
+  try{
+    await initDb()
+  } catch(error){
+    Logger.error(`[APP] No se cargar la base de datos: ${ error.message }`);
+    process.exit(1);
+  }
+
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
