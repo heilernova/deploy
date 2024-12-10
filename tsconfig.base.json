@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@deploy/core": ["packages/core/src/index.ts"],
       "@deploy/schemas/*": ["packages/schemas/src/"]
     }
   },
