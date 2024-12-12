@@ -3,8 +3,8 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS users
 (
     id TEXT,
-    created_at TEXT,
-    update_at TEXT,
+    createdAt TEXT,
+    updateAt TEXT,
     role TEXT,
     name TEXT,
     email TEXT,
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS users_tokens
 (
     id TEXT,
-    created_at TEXT,
-    user_id TEXT,
+    createdAt TEXT,
+    userId TEXT,
     type TEXT,
     hostname TEXT,
     ip TEXT,
@@ -28,18 +28,18 @@ CREATE TABLE IF NOT EXISTS users_tokens
 CREATE TABLE IF NOT EXISTS projects
 (
     id TEXT,
-    created_at TEXT,
-    update_at TEXT,
-    deploy_at TEXT,
+    createdAt TEXT,
+    updateAt TEXT,
+    deployAt TEXT,
     domain TEXT,
     name TEXT,
-    process_name TEXT UNIQUE,
+    processName TEXT UNIQUE,
     version TEXT,
     location TEXT,
-    startup_file TEXT,
+    startupFile TEXT,
     framework TEXT,
-    running_on TEXT,
-    runtime_environment TEXT,
+    runningOn TEXT,
+    runtimeEnvironment TEXT,
     url TEXT,
     repository TEXT,
     env TEXT,
@@ -51,9 +51,9 @@ CREATE TABLE IF NOT EXISTS projects
 CREATE TABLE IF NOT EXISTS projects_log
 (
     id TEXT,
-    created_at TEXT,
-    project_id TEXT,
-    user_id TEXT, type TEXT,
+    createdAt TEXT,
+    projectId TEXT,
+    userId TEXT, type TEXT,
     detail TEXT,
     data TEXT,
     FOREIGN KEY (project_id) REFERENCES projects(id),
@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS projects_log
 
 CREATE TABLE IF NOT EXISTS projects_users
 (
-    project_id TEXT,
-    user_id TEXT,
+    projectId TEXT,
+    userId TEXT,
     permissions TEXT,
     FOREIGN KEY (project_id) REFERENCES projects(id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
