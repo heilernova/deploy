@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@deploy/core": ["packages/core/src/index.ts"],
-      "@deploy/schemas/*": ["packages/schemas/src/"]
+      "@deploy/schemas/*": ["packages/schemas/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
