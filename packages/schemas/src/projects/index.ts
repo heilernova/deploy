@@ -12,7 +12,7 @@ export interface IProject {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    deployAt: string | null;
+    deployAt: Date | null;
     domain: string;
     name: string;
     processName: string;
