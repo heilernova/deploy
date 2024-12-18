@@ -54,17 +54,17 @@ export class ProjectsService {
             deployAt: null,
             domain: data.domain.trim(),
             name: data.name.trim(),
-            version: data.version,
+            version: data.version ?? null,
             processName: data.processName.trim(),
             startupFile: data.startupFile,
             location: data.location,
-            framework: data.framework,
-            runningOn: data.runningOn,
-            runtimeEnvironment: data.runtimeEnvironment,
-            url: data.url,
-            env: data.env ? JSON.stringify(data.env) : null,
-            ignore: data.ignore ? JSON.stringify(data.ignore) : null,
-            observation: data.observations,
+            framework: data.framework ?? null,
+            runningOn: data.runningOn ?? null,
+            runtimeEnvironment: data.runtimeEnvironment ?? null,
+            url: data.url ?? null,
+            env: data.env ? JSON.stringify(data.env) : '{}',
+            ignore: data.ignore ? JSON.stringify(data.ignore) : '[]',
+            observation: data.observations ?? null,
             repository: data.repository ? JSON.stringify(data.repository) : null
         }
         const conn = await this._db.getConnection();
@@ -113,6 +113,8 @@ export class ProjectsService {
             params.push(ignore);
         }
         const conn = await this._db.getConnection();
-        return (await conn.get<{ count: number }>(sql, params)).count == 0;
+        const result = await conn.get<{ count: number }>(sql, params);
+        conn.close();
+        return result?.count == 0;
     }
 }
