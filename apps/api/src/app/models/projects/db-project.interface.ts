@@ -5,7 +5,7 @@ export interface DbProjectInterface {
     id: string;
     createdAt: string;
     updatedAt: string;
-    deployAt: string;
+    deployAt: string | null;
     domain: string;
     name: string;
     processName: string;
