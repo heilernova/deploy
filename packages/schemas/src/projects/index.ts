@@ -16,9 +16,9 @@ export interface IProject {
     domain: string;
     name: string;
     processName: string;
-    version: string;
+    version: string | null; 
     location: string;
-    startupFile: string | null;
+    startupFile: string;
     framework: Framework | null;
     runningOn: RunningOn | null;
     runtimeEnvironment: RuntimeEnvironment | null;
@@ -32,7 +32,7 @@ export interface IProject {
     observations: string | null;
 }
 
-export type ProjectCreateValues = PartialWithout<OmitBy<IProject, "id" | "createdAt" | "updatedAt" | "deployAt">, "domain" | "name" | "processName">
+export type ProjectCreateValues = PartialWithout<OmitBy<IProject, "id" | "createdAt" | "updatedAt" | "deployAt">, "domain" | "name" | "processName" | "location" | "startupFile">
 export type ProjectUpdateValues = Partial<OmitBy<IProject, "id" | "createdAt" | "updatedAt" | "deployAt">>
 
 export type ApiProject = ConvertDateToString<IProject>;
