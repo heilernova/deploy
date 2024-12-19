@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users_tokens
     device TEXT,
     platform TEXT,
     exp TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS projects
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS projects_log
     userId TEXT, type TEXT,
     detail TEXT,
     data TEXT,
-    FOREIGN KEY (project_id) REFERENCES projects(id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (projectId) REFERENCES projects(id),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS projects_users
@@ -67,6 +67,6 @@ CREATE TABLE IF NOT EXISTS projects_users
     permissions TEXT,
     FOREIGN KEY (project_id) REFERENCES projects(id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE(project_id, user_id)
+    UNIQUE(projectId, userId)
 );
 `;
