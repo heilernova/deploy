@@ -20,7 +20,7 @@ export class UsersService {
     public async getAll(filter?: { ignore?: string }): Promise<DbUser[]>{
         const con = await this._db.getConnection();
         let list: DbUser[];
-        if (filter.ignore){
+        if (filter?.ignore){
             list = await con.all<DbUser[]>("SELECT * FROM users WHERE id <> ?", filter.ignore);
         } else {
             list = await con.all<DbUser[]>("SELECT * FROM users");
