@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../common/db';
 import { DbToken } from './db-tokens';
+import { DbUser } from '../users';
+import { UserRole } from '@deploy/schemas/users';
 
 @Injectable()
 export class TokensService {
@@ -68,4 +70,32 @@ export class TokensService {
         if (values.exp !== undefined) update["exp"] = values.exp ? values.exp.toISOString() : null;
         if (values.ip) update["ip"] = values.ip;
     }
+
+    public async verify(id: string): Promise<ITokenAuth | undefined> {
+        const sql = "SELECT a.*, t.type as tokenType, t.exp as tokenExp, t.hostname as tokenHostname users_tokens t INNER JOIN users u WHERE t.id = ?";
+        const conn = await this._db.getConnection();
+
+        const result = await conn.get<DbUser&{ tokenType: string, tokenExp: string | null, tokenHostname: string }  | undefined>(sql, [id]);
+        conn.close();
+        if (result){
+            return {
+                id: result.id,
+                role: result.role,
+                name: result.name,
+                email: result.email,
+                exp: result.tokenExp ? new Date(result.tokenExp) : null,
+                hostname: result.tokenHostname,
+            }
+        }
+        return undefined;
+    }
+}
+
+export interface ITokenAuth {
+    id: string;
+    role: UserRole
+    name: string
+    email: string
+    exp: Date | null
+    hostname: string
 }
