@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext, HttpException } from '@nestjs/c
 import { NestFactory } from '@nestjs/core'
 import { UsersService } from '../models/users';
 import { AppModule } from '../app.module';
-import { AppSession } from './auth.modal';
+import { AppSession } from './app-session';
 
 export const Authenticated = createParamDecorator(
     async (data: "user" | "token" | undefined, ctx: ExecutionContext) => {
