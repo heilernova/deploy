@@ -1,4 +1,6 @@
-export interface ApiResponse<T = JSONObject | JSONArray> {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+export interface ApiResponse<T = any> {
     message?: string | string[];
     warning?: string | string[];
     data?: T
@@ -6,7 +8,7 @@ export interface ApiResponse<T = JSONObject | JSONArray> {
 
 
 
-export interface ApiResponseWithData<T extends JSONObject> extends ApiResponse<T> {
+export interface ApiResponseWithData<T = any> extends ApiResponse<T> {
     data: T
 }
 

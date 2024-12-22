@@ -1,7 +1,6 @@
 export interface ApiAuth {
     role: "admin" | "collaborator";
     name: string;
-    lastName: string;
     token: string;
 }
 
