@@ -47,7 +47,7 @@ export class UsersService {
         return user;
     }
 
-    public async update(id: string, data: OmitBy<DbUser, "id" | "createdAt" | "updateAt">){
+    public async update(id: string, data: Partial<OmitBy<DbUser, "id" | "createdAt" | "updateAt">>){
         const update: Partial<OmitBy<DbUser, "id" | "createdAt">> = {};
         if (data.email) update.email = data.email.toLowerCase();
         if (data.name) update.name = data.name;
