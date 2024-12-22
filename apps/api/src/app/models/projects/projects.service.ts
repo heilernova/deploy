@@ -70,7 +70,7 @@ export class ProjectsService {
         const conn = await this._db.getConnection();
         const values = Object.values(project);
         const sql = `INSERT INTO project(${Object.keys(data).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
-        await conn.exec({ sql, values });
+        await conn.run({ sql, values });
         conn.close();
         return project;
     }
@@ -94,14 +94,14 @@ export class ProjectsService {
 
         const sql = `UPDATE projects ${Object.keys(values).map(x => `${x} = ?`).join(", ")} WHERE id = ?`;
         const conn = await this._db.getConnection();
-        await conn.exec({ sql, values: [...Object.values(values), id] })
+        await conn.run({ sql, values: [...Object.values(values), id] })
         conn.close();
     }
 
     public async delete(id: string){
         const conn = await this._db.getConnection();
         const sql = `DELETE FROM projects WHERE id = ?`;
-        await conn.exec({ sql, values: [id] })
+        await conn.run({ sql, values: [id] })
         conn.close();
     }
 
