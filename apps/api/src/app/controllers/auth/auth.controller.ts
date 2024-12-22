@@ -5,6 +5,7 @@ import { verify } from 'argon2';
 import { UAParser } from 'ua-parser-js';
 import { UsersService } from '@deploy/api/models/users';
 import { TokensService } from '@deploy/api/models/tokens';
+import { CredentialsDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,7 @@ export class AuthController {
     constructor(private readonly _users: UsersService, private readonly _tokens: TokensService){}
 
     @Post()
-    async signIn(@Body() credentials: { username: string, password: string }, @Ip() ip: string, @Headers("user-agent") userAgentString: string, @Headers("x-app-cli") cli?: string): Promise<ApiResponseWithData<ApiAuth>>  {
+    async signIn(@Body() credentials: CredentialsDto, @Ip() ip: string, @Headers("user-agent") userAgentString: string, @Headers("x-app-cli") cli?: string): Promise<ApiResponseWithData<ApiAuth>>  {
         const user = await this._users.get(credentials.username);
         
         if (!user){
