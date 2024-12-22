@@ -8,7 +8,7 @@ export const initDb = async () => {
     if (existsSync("./app.db")) return;
     const db = await open({ filename: "./app.db", driver: sqlite3.Database});
     let sql = `${DB_STRUCTURE_BASE}`;
-    sql += `INSERT INTO users VALUES('${crypto.randomUUID()}', '${(new Date()).toISOString()}', '${(new Date()).toISOString()}', 'admin', 'Administrador', 'admin@admin.com', '${hash("admin")}');`;
+    sql += `INSERT INTO users VALUES('${crypto.randomUUID()}', '${(new Date()).toISOString()}', '${(new Date()).toISOString()}', 'admin', 'Administrador', 'admin@admin.com', '${await hash("admin")}');`;
     await db.exec(sql);
     db.close();
 }

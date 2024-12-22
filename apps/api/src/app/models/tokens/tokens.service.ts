@@ -38,8 +38,9 @@ export class TokensService {
         }
         const conn = await this._db.getConnection();
         const values = Object.values(token);
-        const sql = `INSERT INTO project(${Object.keys(data).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
-        await conn.exec({ sql, values });
+        const sql = `INSERT INTO users_tokens(${Object.keys(token).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
+        console.log(sql, values);
+        await conn.run({ sql, values: values });
         conn.close();
         return this.parse(token);
     }
@@ -72,7 +73,7 @@ export class TokensService {
     }
 
     public async verify(id: string): Promise<ITokenAuth | undefined> {
-        const sql = "SELECT a.*, t.type as tokenType, t.exp as tokenExp, t.hostname as tokenHostname users_tokens t INNER JOIN users u WHERE t.id = ?";
+        const sql = "SELECT u.*, t.type as tokenType, t.exp as tokenExp, t.hostname as tokenHostname from users_tokens t INNER JOIN users u on u.id = t.userId WHERE t.id = ?";
         const conn = await this._db.getConnection();
 
         const result = await conn.get<DbUser&{ tokenType: string, tokenExp: string | null, tokenHostname: string }  | undefined>(sql, [id]);

@@ -7,15 +7,15 @@ import { UsersService } from '@deploy/api/models/users';
 import { TokensService } from '@deploy/api/models/tokens';
 import { CredentialsDto } from './dto';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
 
     constructor(private readonly _users: UsersService, private readonly _tokens: TokensService){}
 
-    @Post()
+    @Post('sign-in')
     async signIn(@Body() credentials: CredentialsDto, @Ip() ip: string, @Headers("user-agent") userAgentString: string, @Headers("x-app-cli") cli?: string): Promise<ApiResponseWithData<ApiAuth>>  {
         const user = await this._users.get(credentials.username);
-        
+        console.log(user);
         if (!user){
             throw new HttpException("Usuario incorrecto.", 400);
         }

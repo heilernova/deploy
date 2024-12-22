@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS projects_users
     projectId TEXT,
     userId TEXT,
     permissions TEXT,
-    FOREIGN KEY (project_id) REFERENCES projects(id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (projectId) REFERENCES projects(id),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(projectId, userId)
 );
 `;

@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { isUUID } from 'class-validator';
 import { getService } from '@deploy/api/utils/get-service';
 import { TokensService } from '@deploy/api/models/tokens';
+import { AppSession } from './app-session';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -30,7 +31,7 @@ export class AuthGuard implements CanActivate {
       throw new HttpException("El token de acceso ha expirado", 403);
     }
 
-    request["appTokenA"] = token;
+    request["appToken"] = new AppSession(tokenAuth);
 
     return true;
   }

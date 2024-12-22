@@ -6,17 +6,17 @@ import { AppSession } from './app-session';
 
 export const Authenticated = createParamDecorator(
     async (data: "user" | "token" | undefined, ctx: ExecutionContext) => {
-        const request = ctx.switchToHttp().getRequest<Request&{ appSession: AppSession }>();
-        if (!(request.appSession instanceof AppSession)){
-            throw new HttpException('No se cargo correctamente la información de la sesión', 500);
+        const request = ctx.switchToHttp().getRequest<Request&{ appToken: AppSession }>();
+        if (!(request.appToken instanceof AppSession)){
+            throw new HttpException('No se cargo correctamente la información de la sesión.', 500);
         }
 
         if (data == "user"){
             const appContext = await NestFactory.createApplicationContext(AppModule);
             const userService = appContext.get(UsersService);
-            return  await userService.get(request.appSession.id);
+            return  await userService.get(request.appToken.id);
         }
 
-        return request.appSession;
+        return request.appToken;
     },
 );

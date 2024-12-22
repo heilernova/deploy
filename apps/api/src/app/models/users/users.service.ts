@@ -42,7 +42,7 @@ export class UsersService {
         const conn = await this._db.getConnection();
         const values = Object.values(data);
         const sql = `INSERT INTO users(${Object.keys(data).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')})`;
-        await conn.exec({ sql, values });
+        await conn.run({ sql, values });
         conn.close();
         return user;
     }
@@ -53,14 +53,14 @@ export class UsersService {
         if (data.name) update.name = data.name;
         if (data.role) update.role = data.role;
         if (data.password) update.password = await hash(data.password);
-        const sql = `UPDATE users ${Object.keys(update).map(x => `${x} = ?`).join(", ")} WHERE id = ?`;
+        const sql = `UPDATE users SET ${Object.keys(update).map(x => `${x} = ?`).join(", ")} WHERE id = ?`;
         const conn = await this._db.getConnection();
-        await conn.exec({ sql, values: [...Object.values(update), id] })
+        await conn.run({ sql, values: [...Object.values(update), id] })
         conn.close();
     }
 
     public async delete(id: string): Promise<void> {
         const conn = await this._db.getConnection();
-        await conn.exec({ sql: "DELETE FROM users WHERE id = ?", values: [id] });
+        await conn.run({ sql: "DELETE FROM users WHERE id = ?", values: [id] });
     }
 }
