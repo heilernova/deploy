@@ -31,7 +31,7 @@ export class AuthService {
     return this._session !== null;
   }
 
-  public signIn(credentials: { username: string, passwords: string }): Promise<void> {
+  public signIn(credentials: { username: string, password: string }): Promise<void> {
     return new Promise((resolve, reject) => {
       this._http.post<ApiResponseWithData<ApiAuth>>("sign-in", credentials).subscribe({
         next: res => {
