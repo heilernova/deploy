@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS projects
 (
     id TEXT,
     createdAt TEXT,
-    updateAt TEXT,
+    updatedAt TEXT,
     deployAt TEXT,
     domain TEXT,
     name TEXT,
