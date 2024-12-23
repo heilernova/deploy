@@ -24,9 +24,15 @@
           {
             "glob": "**/*",
             "input": "apps/panel/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/"
           }
         ],
         "styles": [
+          "apps/panel/src/theme.less",
           "apps/panel/src/styles.scss"
         ],
         "scripts": []
