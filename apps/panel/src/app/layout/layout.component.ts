@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer'
 import { DrawerUserMenuComponent } from '../ui/drawer-user-menu/drawer-user-menu.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -10,7 +10,8 @@ import { AuthService } from '../auth/auth.service';
   imports: [
     RouterLink,
     NzDrawerModule,
-    NzButtonModule
+    NzButtonModule,
+    RouterOutlet
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
