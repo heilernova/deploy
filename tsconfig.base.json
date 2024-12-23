@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@deploy/api/*": ["apps/api/src/app/*"],
+      "@deploy/panel/*": ["apps/panel/src/app/*"],
       "@deploy/core": ["packages/core/src/index.ts"],
       "@deploy/schemas/*": ["packages/schemas/src/*"]
     }
