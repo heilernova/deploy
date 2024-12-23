@@ -1,1 +1,26 @@
-<p>login-page works!</p>
+<section>
+    <form nz-form nzLayout="vertical" [formGroup]="credentials">
+        <h1>Iniciar sesión</h1>
+        <div>
+            <nz-form-item>
+                <nz-form-control>
+                    <input nz-input placeholder="Ingresa tu usuario" formControlName="username">
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-control>
+                    <input nz-input placeholder="Ingresa tú contraseña" type="password" formControlName="password">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            <button nz-button nzType="primary" type="button" [disabled]="disableButtonSignIn()" (click)="onClickSignIn()">
+                Iniciar sesión
+            </button>
+        </div>
+    </form>
+</section>
+<footer>
+    Desarrollado por Novah.dev
+</footer>
