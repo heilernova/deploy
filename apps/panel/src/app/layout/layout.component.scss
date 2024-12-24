@@ -17,6 +17,7 @@ aside {
     display: grid;
     grid-template-rows: auto 1fr;
     background-color: var(--app-palette-background-paper);
+    border-right: 1px solid rgba(48, 56, 64, 0.3);;
     nav {
         display: grid;
         grid-template-rows: 1fr auto;
