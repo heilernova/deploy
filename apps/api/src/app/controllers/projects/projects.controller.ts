@@ -1,7 +1,8 @@
 import { AuthGuard } from '@deploy/api/auth';
-import { ProjectsService } from '@deploy/api/models/projects';
+import { ProjectPipe, ProjectsService } from '@deploy/api/models/projects';
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ProjectCreateDto, ProjectUpdateDto } from './dto';
+import { IProject } from '@deploy/schemas/projects';
 
 @UseGuards(AuthGuard)
 @Controller('projects')
@@ -37,11 +38,7 @@ export class ProjectsController {
     }
 
     @Put(":id")
-    async update(@Param("id") id: string, @Body() body: ProjectUpdateDto){
-
-        const project =  await this._projects.get(id);
-
-        if (!project) throw new HttpException("Proyecto no encontrado.", 404);
+    async update(@Param("id", ProjectPipe) project: IProject, @Body() body: ProjectUpdateDto){
 
         const [name, processName] = await  Promise.all([
             body.name ? this._projects.isAvailableName(body.name, project.domain) : true,
@@ -55,13 +52,11 @@ export class ProjectsController {
             throw new HttpException({ message } , 400);
         }
 
-        await this._projects.update(id, body);
+        await this._projects.update(project.id, body);
     }
 
     @Delete(":id")
-    async delete(@Param("id") id: string){
-        const project =  await this._projects.get(id);
-        if (!project) throw new HttpException("Proyecto no encontrado.", 404);
-        this._projects.delete(id);
+    async delete(@Param("id", ProjectPipe) project: IProject){
+        this._projects.delete(project.id);
     }
 }
