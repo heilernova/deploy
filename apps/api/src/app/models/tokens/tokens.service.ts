@@ -90,6 +90,12 @@ export class TokensService {
         }
         return undefined;
     }
+
+    public async delete(id: string): Promise<void> {
+        const conn = await this._db.getConnection();
+        await conn.run("DELETE FROM users_tokens WHERE id = ?", [id]);
+        conn.close();
+    }
 }
 
 export interface ITokenAuth {
