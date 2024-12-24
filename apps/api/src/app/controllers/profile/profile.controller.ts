@@ -34,7 +34,7 @@ export class ProfileController {
         if (!(await verify(user.password, update.password))){
             throw new HttpException("Tu contraseña es incorrecta.", 400);
         }
-        this._users.update(user.id, { password: update.password })
+        await this._users.update(user.id, { password: update.newPassword })
         return {
             message: "Contraseña actualizada."
         }
