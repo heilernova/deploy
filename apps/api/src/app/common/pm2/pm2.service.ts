@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { execSync } from 'child_process';
 
 export interface Pm2Process {
@@ -28,6 +28,15 @@ export interface Pm2Process {
 
 @Injectable()
 export class Pm2Service {
+
+    version(): string {    
+        try {
+            return execSync("pm2 --version").toString("utf8");
+        } catch {
+            throw new HttpException('"pm2" no se reconoce como un comando interno o externo en el servidor.', 500)
+        }
+    }
+
     getAll(): Pm2Process[] {
         const result = execSync('pm2 jlist');
         return JSON.parse(result.toString());
