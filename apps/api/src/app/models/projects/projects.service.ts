@@ -41,7 +41,7 @@ export class ProjectsService {
 
     public async get(id: string): Promise<IProject | undefined> {
         const conn = await this._db.getConnection();
-        const result = await conn.all<DbProjectInterface | undefined>("SELECT * FROM projects WHERE id = ?", [id]);
+        const result = await conn.get<DbProjectInterface | undefined>("SELECT * FROM projects WHERE id = ?", [id]);
         conn.close();
         return result ? this.parse(result) : undefined;
     }
