@@ -1,0 +1,28 @@
+<h3>Tokens de acceso</h3>
+<ul>
+    @for (item of list(); track i; let first = $first, i = $index) {
+        <li>
+            <div>
+                {{item.type}}
+            </div>
+            <div>
+                {{item.createdAt | date}}
+            </div>
+            <div>
+                {{item.device}}
+            </div>
+            <div>
+                {{item.hostname}}
+            </div>
+
+            <div>
+                {{item.platform}}
+            </div>
+            <div>
+                <button nz-button [disabled]="first" (click)="onClickDeleteToken(item.id)">
+                    Eliminar
+                </button>
+            </div>
+        </li>
+    }
+</ul>

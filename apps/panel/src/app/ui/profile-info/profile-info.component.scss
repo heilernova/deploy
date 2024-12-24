@@ -1,0 +1,22 @@
+section {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5em;
+    row-gap: 2em;
+    background-color: var(--app-palette-background-paper);
+    border: 1px solid rgba(48, 56, 64, 0.3);
+    border-radius: 5px;
+    padding: 1em;
+}
+.item {
+    .field {
+        color: rgba(150, 147, 147, 0.925);
+        font-weight: 500;
+        font-size: 90%;
+        // color: red;
+    }
+    .value {
+        color: white;
+        font-weight: 500;
+    }
+}

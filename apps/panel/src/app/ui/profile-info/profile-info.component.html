@@ -1,0 +1,37 @@
+<section>
+    <div style="display: flex; gap: 3em; flex-wrap: wrap;">
+        <div class="item">
+            <div class="field">
+                Rol
+            </div>
+            <div class="value">
+                {{data()?.role ?? "Cargando..."}}
+            </div>
+        </div>
+    
+        <div class="item">
+            <div class="field">
+                Nombre del usuario
+            </div>
+            <div class="value">
+                {{data()?.name ?? "Cargando..."}}
+            </div>
+        </div>
+       
+    
+        <div class="item">
+            <div class="field">
+                Correo electrónico
+            </div>
+            <div class="value">
+                {{data()?.email ?? "Cargando..."}}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button nz-button>
+            Editar información
+        </button>
+    </div>
+</section>
