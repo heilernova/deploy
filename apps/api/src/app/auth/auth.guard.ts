@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
       throw new HttpException("El token de acceso ha expirado", 403);
     }
 
-    request["appToken"] = new AppSession(tokenAuth);
+    request["appToken"] = new AppSession({ ...tokenAuth, token });
 
     return true;
   }

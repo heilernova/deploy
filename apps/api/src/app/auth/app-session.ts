@@ -6,14 +6,16 @@ export class AppSession implements ITokenAuth {
     public readonly email: string;
     public readonly exp: Date | null;
     public readonly hostname: string;
+    public readonly token: string;
 
-    constructor(data: ITokenAuth){
+    constructor(data: ITokenAuth&{ token: string }){
         this.id = data.id;
         this.role = data.role;
         this.name = data.name;
         this.email = data.email;
         this.exp = data.exp;
         this.hostname = data.hostname;
+        this.token = data.token;
     }
 
 }
