@@ -3,11 +3,12 @@ import { ProjectPipe, ProjectsService } from '@deploy/api/models/projects';
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ProjectCreateDto, ProjectUpdateDto } from './dto';
 import { IProject } from '@deploy/schemas/projects';
+import { Pm2Service } from '@deploy/api/common/pm2/pm2.service';
 
 @UseGuards(AuthGuard)
 @Controller('projects')
 export class ProjectsController {
-    constructor(private readonly _projects: ProjectsService){}
+    constructor(private readonly _projects: ProjectsService, private readonly _pm2: Pm2Service){}
 
     @Get()
     async getAll(){
@@ -58,5 +59,40 @@ export class ProjectsController {
     @Delete(":id")
     async delete(@Param("id", ProjectPipe) project: IProject){
         this._projects.delete(project.id);
+    }
+
+    @Post(":id/launch")
+    async launch(@Param("id", ProjectPipe) project: IProject){
+        if (project.runningOn == "PM2"){
+            this._pm2.version();
+            let process = this._pm2.getAll().find(x => x.name == project.processName);
+            if (process){
+                this._pm2.reload(process.name, project.startupFile, project.env);
+            } else {
+                this._pm2.start(project.location, project.startupFile, project.processName, project.env);
+            }
+            process = this._pm2.get(project.processName);
+            return {
+                data: process?.pm2_env.status ?? null
+            }
+        } if (project.runningOn === null){
+            return;
+        }
+        throw new HttpException(`No hay soporte para aplicaciones ejecutadas en ${project.runningOn}.`, 500);
+    }
+
+    @Post(":id/stop")
+    async stop(@Param("id", ProjectPipe) project: IProject){
+        if (project.runningOn == "PM2"){
+            this._pm2.version();
+            const process = this._pm2.getAll().find(x => x.name == project.processName);
+            if (!process){
+                throw new HttpException("No se encontró el proceso del aplicación", 400);
+            }
+            this._pm2.stop(process.pm_id);
+        } if (project.runningOn === null){
+            return;
+        }
+        throw new HttpException(`No hay soporte para aplicaciones ejecutadas en ${project.runningOn}.`, 500);
     }
 }
