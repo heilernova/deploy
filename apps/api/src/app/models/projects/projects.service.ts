@@ -69,7 +69,7 @@ export class ProjectsService {
         }
         const conn = await this._db.getConnection();
         const values = Object.values(project);
-        const sql = `INSERT INTO project(${Object.keys(data).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
+        const sql = `INSERT INTO projects(${Object.keys(project).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
         await conn.run({ sql, values });
         conn.close();
         return project;
@@ -108,6 +108,19 @@ export class ProjectsService {
     public async isAvailableName(name: string, domain: string, ignore?: string): Promise<boolean> {
         let sql = `SELECT COUNT(*) as count FROM projects WHERE domain = ? AND NAME = ?`;
         const params = [name, domain]
+        if (ignore){
+            sql += " AND  id <> ?";
+            params.push(ignore);
+        }
+        const conn = await this._db.getConnection();
+        const result = await conn.get<{ count: number }>(sql, params);
+        conn.close();
+        return result?.count == 0;
+    }
+
+    public async isAvailableProcessName(processName: string, ignore?: string): Promise<boolean> {
+        let sql = `SELECT COUNT(*) as count FROM projects WHERE processName = ?`;
+        const params = [processName]
         if (ignore){
             sql += " AND  id <> ?";
             params.push(ignore);
