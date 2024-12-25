@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { Body, Controller, FileTypeValidator, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, HttpException, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProjectPipe } from '@deploy/api/models/projects';
+import { ProjectPipe, ProjectsService } from '@deploy/api/models/projects';
 import { IProject } from '@deploy/schemas/projects';
 import { AppSession, Authenticated, AuthGuard } from '@deploy/api/auth';
 import { clearDir } from '@deploy/api/utils/clear-dir';
@@ -15,6 +15,7 @@ import { Pm2Service } from '@deploy/api/common/pm2/pm2.service';
 export class DeployController {
 
     constructor(
+        private readonly _projects: ProjectsService,
         private readonly _pm2: Pm2Service
     ){}
 
@@ -35,6 +36,12 @@ export class DeployController {
         @UploadedFile(new ParseFilePipe({ validators: [  new FileTypeValidator({ fileType: 'zip' }) ]}))
         file: Express.Multer.File
     ){
+        if (session.role !== "admin"){
+            const permissions =  await this._projects.getPermissions(project.id, session.id);
+            if (!permissions.some(x => x == "DEPLOY")){
+                throw new HttpException("No tienes permisos para desplegar ente proyecto", 403);
+            }
+        }
         if (project.framework == "NestJS"){
             return this.nestJS(project, file.buffer);
         } else if (project.framework == "Angular"){
