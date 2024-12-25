@@ -130,4 +130,11 @@ export class ProjectsService {
         conn.close();
         return result?.count == 0;
     }
+
+    public async getPermissions(projectId: string, userId: string): Promise<string[]> {
+        const conn = await this._db.getConnection();
+        const result = await conn.get<{ permissions: string }>("SELECT a.permissions FROM projects_users a INNER JOINT projects b on a.projectId = b.id WHERE b.id = ? and a.userId = ?", projectId, userId);
+        conn.close();
+        return result ? JSON.parse(result.permissions) : [];
+    }
 }
