@@ -7,6 +7,7 @@ export const RUNNING_ON_LIST = ["PM2", "Docker", "LiteSpeed", "Apache"] as const
 export type Framework = typeof FRAMEWORK_LIST[number];
 export type RunningOn = typeof RUNNING_ON_LIST[number];
 export type RuntimeEnvironment = typeof RUNTIME_ENVIRONMENT_LIST[number];
+export type ProjectStatus = "online" | "stopping" | "stopped" | "launching" | "errored" | "one-launch-status";
 
 export interface IProject {
     id: string;
@@ -35,4 +36,4 @@ export interface IProject {
 export type ProjectCreateValues = PartialWithout<OmitBy<IProject, "id" | "createdAt" | "updatedAt" | "deployAt">, "domain" | "name" | "processName" | "location" | "startupFile">
 export type ProjectUpdateValues = Partial<OmitBy<IProject, "id" | "createdAt" | "updatedAt" | "deployAt">>
 
-export type ApiProject = ConvertDateToString<IProject>;
+export type ApiProject = ConvertDateToString<IProject> & { status: ProjectStatus };
