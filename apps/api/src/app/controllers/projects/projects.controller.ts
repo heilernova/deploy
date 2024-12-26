@@ -2,8 +2,9 @@ import { AuthGuard } from '@deploy/api/auth';
 import { ProjectPipe, ProjectsService } from '@deploy/api/models/projects';
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ProjectCreateDto, ProjectUpdateDto } from './dto';
-import { IProject } from '@deploy/schemas/projects';
+import { ApiProject, IProject, ProjectStatus } from '@deploy/schemas/projects';
 import { Pm2Service } from '@deploy/api/common/pm2/pm2.service';
+import { ApiResponseWithData } from '@deploy/schemas/api';
 
 @UseGuards(AuthGuard)
 @Controller('projects')
@@ -11,9 +12,37 @@ export class ProjectsController {
     constructor(private readonly _projects: ProjectsService, private readonly _pm2: Pm2Service){}
 
     @Get()
-    async getAll(){
+    async getAll(): Promise<ApiResponseWithData<ApiProject[]>>{
+        const processes = this._pm2.getAll();
+        const projects = await this._projects.getAll();
         return {
-            data: await this._projects.getAll()
+            data: projects.map(project => {
+                let status: ProjectStatus = "online";
+                if (project.runningOn == "PM2"){
+                    status = processes.find(x => x.name == project.processName)?.pm2_env.status ?? "stopped";
+                }
+                return {
+                    id: project.id,
+                    createdAt: project.createdAt.toISOString(),
+                    updatedAt: project.updatedAt.toISOString(),
+                    deployAt: project.deployAt ? project.deployAt.toISOString() : null, 
+                    domain: project.domain,
+                    name: project.name,
+                    processName: project.processName,
+                    version: project.version,
+                    startupFile: project.startupFile,
+                    url: project.url,
+                    location: project.location,
+                    framework: project.framework,
+                    runningOn: project.runningOn,
+                    runtimeEnvironment: project.runtimeEnvironment,
+                    env: project.env,
+                    ignore: project.ignore,
+                    repository: project.repository,
+                    observations: project.observations,
+                    status,
+                }
+            })
         }
     }
 
