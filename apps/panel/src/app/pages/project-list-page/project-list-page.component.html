@@ -1,1 +1,28 @@
-<p>project-list-page works!</p>
+<section class="panel-control">
+    <input nz-input placeholder="Buscar proyecto" disabled>
+    <button nz-button>
+        Agregar producto
+    </button>
+</section>
+<section class="panel-results">
+    <ul>
+        @for (item of list(); track $index) {
+            <li>
+                <div class="info">
+                    <div class="name">
+                        {{item.name}}
+                    <div class="domain">
+                        {{item.domain}}
+                    </div>
+                    </div>
+                </div>
+                <div>
+                    {{item.status}}
+                </div>
+                <button nz-button nzType="text">
+                    Editar
+                </button>
+            </li>
+        }
+    </ul>
+</section>
