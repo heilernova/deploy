@@ -29,6 +29,15 @@ export interface Pm2Process {
 @Injectable()
 export class Pm2Service {
 
+    installed(){
+        try {
+            execSync("pm2 --version").toString("utf8");
+            return true;
+        } catch {
+            return false
+        }
+    }
+
     version(): string {    
         try {
             return execSync("pm2 --version").toString("utf8");
