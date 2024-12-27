@@ -1,0 +1,104 @@
+<form nz-form nzLayout="vertical" [formGroup]="formGroup">
+    <div style="display: flex; column-gap: 1em;">
+        <nz-form-item>
+            <nz-form-label nzRequired>
+                Dominio
+            </nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="domain">
+            </nz-form-control>
+        </nz-form-item>
+    
+        <nz-form-item>
+            <nz-form-label nzRequired>
+                Nombre
+            </nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="name">
+            </nz-form-control>
+        </nz-form-item>
+    
+        <nz-form-item>
+            <nz-form-label nzRequired>
+                Nombre del proceso
+            </nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="processName">
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <nz-form-item>
+        <nz-form-label nzRequired>
+            Ubicación
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="location">
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzRequired>
+            Archivo de arranques
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="startupFile">
+        </nz-form-control>
+    </nz-form-item>
+
+    <div style="display: flex; column-gap: 1.5em;">
+        <nz-form-item style="width: 10em;">
+            <nz-form-label>
+                Framework
+            </nz-form-label>
+            <nz-form-control>
+                <nz-select nzAllowClear formControlName="framework">
+                    <nz-option nzLabel="NestJS" nzValue="NestJS"/>
+                    <nz-option nzLabel="Angular" nzValue="Angular"/>
+                    <nz-option nzLabel="FastAPI" nzValue="FastAPI"/>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item style="width: 10em;">
+            <nz-form-label>
+                Entorno de ejecución
+            </nz-form-label>
+            <nz-form-control>
+                <nz-select nzAllowClear formControlName="runtimeEnvironment">
+                    <nz-option nzLabel="Node.js" nzValue="Node.js"/>
+                    <nz-option nzLabel="Python" nzValue="Python"/>
+                    <nz-option nzLabel="PHP" nzValue="PHP"/>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item style="width: 10em;">
+            <nz-form-label>
+                Ejecutado en
+            </nz-form-label>
+            <nz-form-control>
+                <nz-select nzAllowClear formControlName="runningOn">
+                    <nz-option nzLabel="PM2" nzValue="PM2"/>
+                    <nz-option nzLabel="Docker" nzValue="Docker"/>
+                    <nz-option nzLabel="Apache" nzValue="Apache"/>
+                    <nz-option nzLabel="LiteSpeed" nzValue="LiteSpeed"/>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <nz-form-item>
+        <nz-form-label>
+            Archivos a ignorar en la instalación
+        </nz-form-label>
+        <nz-form-control>
+            <nz-select nzMode="tags" formControlName="ignore"/>
+        </nz-form-control>
+    </nz-form-item>
+
+    <section>
+        <h3>Variables de entorno</h3>
+        <app-env-control formControlName="env"/>
+    </section>
+</form>

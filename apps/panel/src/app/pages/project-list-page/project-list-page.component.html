@@ -19,8 +19,8 @@
                 <div>
                     {{item.status}}
                 </div>
-                <button nz-button nzType="text">
-                    Editar
+                <button nz-button nzType="text" [routerLink]="item.id">
+                    Ver mas
                 </button>
             </li>
         }

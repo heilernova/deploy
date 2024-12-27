@@ -1,0 +1,15 @@
+<ul style="display: flex; flex-direction: column; row-gap: .5em;">
+    @for (item of formArray.controls; track i; let i = $index, last = $last) {
+        <li style="display: grid; column-gap: .5em; grid-template-columns: 15em 1fr auto;" [formGroup]="item">
+            <nz-form-control>
+                <input nz-input placeholder="Key" class="uppercase" formControlName="key">
+            </nz-form-control>
+            <nz-form-control>
+                <input nz-input placeholder="Valor" formControlName="value">
+            </nz-form-control>
+            <button nz-button type="button" (click)="onClickDelete(i)">Eliminar</button>
+        </li>
+    } @empty {
+    }
+    <button nz-button (click)="onClickAdd()" type="button">Agregar variable</button>
+</ul>

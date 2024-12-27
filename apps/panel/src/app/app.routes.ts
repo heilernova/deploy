@@ -9,6 +9,8 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./layout/layout.component').then(x => x.LayoutComponent),
         children: [
             { path: 'projects', loadComponent: () => import('./pages/project-list-page/project-list-page.component').then(x => x.ProjectListPageComponent) },
+            { path: 'projects/new', loadComponent: () => import('./pages/project-new-page/project-new-page.component').then(x => x.ProjectNewPageComponent) },
+            { path: 'projects/:id', loadComponent: () => import('./pages/project-view-page/project-view-page.component').then(x => x.ProjectViewPageComponent) },
             { path: 'pm2', loadComponent: () => import('./pages/pm2-dashboard-page/pm2-dashboard-page.component').then(x => x.Pm2DashboardPageComponent) },
             { path: 'docker', loadComponent: () => import('./pages/docker-dashboard-page/docker-dashboard-page.component').then(x => x.DockerDashboardPageComponent) },
             { path: 'profile', loadComponent: () => import('./pages/profile-page/profile-page.component').then(x => x.ProfilePageComponent) }

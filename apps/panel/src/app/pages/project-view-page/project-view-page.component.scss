@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}
+.header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    h1 {
+      margin: 0;
+    }
+    background-color: var(--app-palette-background-paper);
+    border: 1px solid var(--app-palette-divider);
+    padding: 0.5em;
+    border-radius: 5px;
+}
+
+.content {
+    background-color: var(--app-palette-background-paper);
+    border: 1px solid var(--app-palette-divider);
+    padding: 0.5em;
+    border-radius: 5px;
+}
