@@ -92,7 +92,7 @@ export class ProjectsService {
         if (data.observations) values.observation = data.observations;
         if (data.repository) values.repository = data.repository ? JSON.stringify(data.repository) : undefined;
 
-        const sql = `UPDATE projects ${Object.keys(values).map(x => `${x} = ?`).join(", ")} WHERE id = ?`;
+        const sql = `UPDATE projects SET ${Object.keys(values).map(x => `${x} = ?`).join(", ")} WHERE id = ?`;
         const conn = await this._db.getConnection();
         await conn.run({ sql, values: [...Object.values(values), id] })
         conn.close();
