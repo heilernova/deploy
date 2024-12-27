@@ -1,4 +1,4 @@
-import { Framework, FRAMEWORK_LIST, ProjectCreateValues, RUNNING_ON_LIST, RunningOn, RuntimeEnvironment } from "@deploy/schemas/projects"
+import { Framework, FRAMEWORK_LIST, ProjectCreateValues, RUNNING_ON_LIST, RunningOn, RUNTIME_ENVIRONMENT_LIST, RuntimeEnvironment } from "@deploy/schemas/projects"
 import { IsIn, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl } from "class-validator"
 
 export class ProjectCreateDto implements ProjectCreateValues {
@@ -32,7 +32,7 @@ export class ProjectCreateDto implements ProjectCreateValues {
     @IsOptional()
     runningOn?: RunningOn | null;
 
-    @IsIn(RUNNING_ON_LIST)
+    @IsIn(RUNTIME_ENVIRONMENT_LIST)
     @IsOptional()
     runtimeEnvironment?: RuntimeEnvironment | null;
 
