@@ -71,8 +71,8 @@ export class ProjectsController {
     async update(@Param("id", ProjectPipe) project: IProject, @Body() body: ProjectUpdateDto){
 
         const [name, processName] = await  Promise.all([
-            body.name ? this._projects.isAvailableName(body.name, project.domain) : true,
-            body.processName ? this._projects.isAvailableProcessName(body.processName) : true
+            body.name ? this._projects.isAvailableName(body.name, project.domain, project.id) : true,
+            body.processName ? this._projects.isAvailableProcessName(body.processName, project.id) : true
         ]);
 
         if (!name || !processName){
