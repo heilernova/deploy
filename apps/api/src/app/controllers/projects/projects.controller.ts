@@ -5,6 +5,9 @@ import { ProjectCreateDto, ProjectUpdateDto } from './dto';
 import { ApiProject, IProject, ProjectStatus } from '@deploy/schemas/projects';
 import { Pm2Service } from '@deploy/api/common/pm2/pm2.service';
 import { ApiResponseWithData } from '@deploy/schemas/api';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { execSync } from 'node:child_process';
 
 @UseGuards(AuthGuard)
 @Controller('projects')
@@ -92,20 +95,35 @@ export class ProjectsController {
 
     @Post(":id/launch")
     async launch(@Param("id", ProjectPipe) project: IProject){
+        let message: string | undefined = undefined;
         if (project.runningOn == "PM2"){
-            this._pm2.version();
+            if (!this._pm2.installed()){
+                throw new HttpException("No se encuentra instalado PM2", 500);
+            }
+
+            if (!existsSync(join(project.location, project.startupFile))){
+                throw new HttpException(`No se encontró el archivo de arranque el proyecto ${join(project.location, project.startupFile)}`, 500);
+            }
+
+            if (project.runtimeEnvironment == "Node.js" && !existsSync(join(project.location, "node_modules"))){
+                message = execSync('npm i --omit=dev', { cwd:  project.location, stdio: "pipe" }).toString("utf8");
+            }
+
             let process = this._pm2.getAll().find(x => x.name == project.processName);
             if (process){
-                this._pm2.reload(process.name, project.startupFile, project.env);
+                this._pm2.reload(process.name, project.location, project.env);
             } else {
                 this._pm2.start(project.location, project.startupFile, project.processName, project.env);
             }
             process = this._pm2.get(project.processName);
             return {
+                message: message,
                 data: process?.pm2_env.status ?? null
             }
         } if (project.runningOn === null){
-            return;
+            return {
+                data: "stop"
+            }
         }
         throw new HttpException(`No hay soporte para aplicaciones ejecutadas en ${project.runningOn}.`, 500);
     }
@@ -119,6 +137,9 @@ export class ProjectsController {
                 throw new HttpException("No se encontró el proceso del aplicación", 400);
             }
             this._pm2.stop(process.pm_id);
+            return {
+                data: "stopped"
+            }
         } if (project.runningOn === null){
             return;
         }
