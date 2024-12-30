@@ -1,8 +1,8 @@
-import { AuthGuard } from '@deploy/api/auth';
+import { AppSession, Authenticated, AuthGuard } from '@deploy/api/auth';
 import { ProjectPipe, ProjectsService } from '@deploy/api/models/projects';
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ProjectCreateDto, ProjectUpdateDto } from './dto';
-import { ApiProject, IProject, ProjectStatus } from '@deploy/schemas/projects';
+import { ApiProject, Framework, IProject, ProjectStatus } from '@deploy/schemas/projects';
 import { Pm2Service } from '@deploy/api/common/pm2/pm2.service';
 import { ApiResponseWithData } from '@deploy/schemas/api';
 import { existsSync } from 'node:fs';
@@ -15,9 +15,24 @@ export class ProjectsController {
     constructor(private readonly _projects: ProjectsService, private readonly _pm2: Pm2Service){}
 
     @Get()
-    async getAll(): Promise<ApiResponseWithData<ApiProject[]>>{
-        const processes = this._pm2.getAll();
+    async getAll(@Authenticated() session: AppSession): Promise<ApiResponseWithData<ApiProject | { id: string, domain: string, name: string, framework: Framework | null }[]>>{
         const projects = await this._projects.getAll();
+        
+        if (session.type == "cli"){
+            return {
+                data: projects.map(x => {
+                    return {
+                        id: x.id,
+                        domain: x.domain,
+                        name: x.name,
+                        framework: x.framework,
+                    }
+                })
+            }
+        }
+        
+        const processes = this._pm2.getAll();
+
         return {
             data: projects.map(project => {
                 let status: ProjectStatus = "online";
