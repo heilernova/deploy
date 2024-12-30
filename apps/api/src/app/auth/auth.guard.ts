@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
 
     const token = request.headers["x-app-token"];
+    const type = request.headers["x-app-type"] ?? null;
     const tokensService = await getService(TokensService);
 
     
@@ -31,7 +32,7 @@ export class AuthGuard implements CanActivate {
       throw new HttpException("El token de acceso ha expirado", 403);
     }
 
-    request["appToken"] = new AppSession({ ...tokenAuth, token });
+    request["appToken"] = new AppSession({ ...tokenAuth, token, type: type == "cli" ? "cli" : "web" });
 
     return true;
   }
