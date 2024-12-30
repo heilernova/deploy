@@ -7,8 +7,9 @@ export class AppSession implements ITokenAuth {
     public readonly exp: Date | null;
     public readonly hostname: string;
     public readonly token: string;
+    public readonly type: "cli" | "web"
 
-    constructor(data: ITokenAuth&{ token: string }){
+    constructor(data: ITokenAuth&{ token: string, type: "cli" | "web" }){
         this.id = data.id;
         this.role = data.role;
         this.name = data.name;
@@ -16,6 +17,7 @@ export class AppSession implements ITokenAuth {
         this.exp = data.exp;
         this.hostname = data.hostname;
         this.token = data.token;
+        this.type = data.type;
     }
 
 }
