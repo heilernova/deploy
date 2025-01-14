@@ -61,6 +61,8 @@ export class ProjectsDataSourceService {
     return new Promise((resolve, reject) => {
       this._http.post<ApiResponseWithData<ApiProject>>("projects", data).subscribe({
         next: res => {
+          const project = new Project(res.data);
+          this._list.push(project);
           resolve(new Project(res.data));
         },
         error: err =>  reject(err)
