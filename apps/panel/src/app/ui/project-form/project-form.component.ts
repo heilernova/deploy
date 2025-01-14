@@ -5,7 +5,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule  } from 'ng-zorro-antd/select';
 import { EnvControlComponent } from '../env-control/env-control.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Framework, IProject, RunningOn, RuntimeEnvironment } from '@deploy/schemas/projects';
+import { Framework, RunningOn, RuntimeEnvironment } from '@deploy/schemas/projects';
 import { markAllAsDirty } from '@deploy/panel/utils/mark-all-as-dirty';
 import { Project } from '@deploy/panel/data/projects/project';
 import { ProjectsDataSourceService } from '@deploy/panel/data/projects/projects-data-source.service';
@@ -99,7 +99,7 @@ export class ProjectFormComponent {
     }
   }
 
-  public onSave(): Promise<IProject> {
+  public onSave(): Promise<Project> {
     return new Promise((resolve, reject) => {
 
       if (this.invalid()){
