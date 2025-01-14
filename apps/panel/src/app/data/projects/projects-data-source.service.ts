@@ -98,4 +98,19 @@ export class ProjectsDataSourceService {
       })
     })
   }
+
+  public delete(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._http.delete(`projects/${id}`).subscribe({
+        next: () => {
+          const index = this._list.findIndex(x => x.id == id);
+          if (index > -1){
+            this._list.splice(index, 1);
+          }
+          resolve();
+        },
+        error: err => reject(err)
+      })
+    })
+  }
 }

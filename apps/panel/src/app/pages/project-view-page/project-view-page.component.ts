@@ -7,12 +7,14 @@ import { ProjectsDataSourceService } from '@deploy/panel/data/projects/projects-
 import { ProjectFormComponent } from '@deploy/panel/ui/project-form/project-form.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-project-view-page',
   imports: [
     NzButtonModule,
-    ProjectFormComponent
+    ProjectFormComponent,
+    NzModalModule
   ],
   templateUrl: './project-view-page.component.html',
   styleUrl: './project-view-page.component.scss'
@@ -22,6 +24,7 @@ export class ProjectViewPageComponent {
   private readonly _router = inject(Router);
   private readonly _projectsDataSource = inject(ProjectsDataSourceService);
   private readonly _nzMessage = inject(NzMessageService);
+  private readonly _nzModal = inject(NzModalService);
 
   public readonly disabled = signal<boolean>(false);
   protected project = signal<Project | null>(null);
@@ -114,6 +117,28 @@ export class ProjectViewPageComponent {
           this.disabled.set(false);
         })
       }
+    }
+  }
+
+  onClickDelete(): void {
+    const project = this.project();
+    if (project){
+      this._nzModal.confirm({
+        nzTitle: "¿Desea eliminar la aplicación?",
+        nzOnOk: () => {
+          if (project.status === "stopped"){
+            this._projectsDataSource.delete(project.id).then(() => {
+              this._nzMessage.success("Aplicación eliminada correctamente.");
+              this._router.navigate(["/projects"]);
+            })
+            .catch(() => {
+              this._nzMessage.error("No se pudo eliminar la aplicación.");
+            })
+          } else {
+            this._nzMessage.warning("La aplicación debe ser detenida para ser eliminada.");
+          }
+        }
+      })
     }
   }
 }
