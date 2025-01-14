@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiResponseWithData } from '@deploy/schemas/api';
 import { Project } from './project';
 import { ApiProject, ProjectStatus } from '@deploy/schemas/projects';
+import { definePropertiesOnObject } from '@deploy/core';
 
 
 @Injectable({
@@ -50,6 +51,12 @@ export class ProjectsDataSourceService {
     return new Promise((resolve, reject) => {
       this._http.put<ApiResponseWithData<ApiProject>>(`projects/${id}`, data).subscribe({
         next: res => {
+          let project = this._list.find(x => x.id == id);
+          if (!project){
+            project = new Project(res.data);
+          } else {
+            definePropertiesOnObject(project, res.data);
+          }
           resolve();
         },
         error: err => reject(err)
