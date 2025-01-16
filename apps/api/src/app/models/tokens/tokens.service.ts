@@ -38,8 +38,22 @@ export class TokensService {
         }
         const conn = await this._db.getConnection();
         const values = Object.values(token);
+
+        // Obtener los Tokens actuales
+        const tokens = await conn.all<{ id: string, createdAt: string, userId: string, type: "cli" | "web", hostname: string, ip: string, device: string, platform: string | null, exp: string | null }[]>("SELECT * FROM users_tokens WHERE userId = ? AND type = ? ORDER BY CASE WHEN exp IS NULL THEN 1 ELSE 0 END, exp DESC", [data.userId, data.type]);
+        
+        if (tokens.length > 2){
+            const remove = tokens.splice(2, tokens.length);
+            let conditions = Array(remove.length).fill("id = ?").join(" OR ");
+            const params = remove.map(x => x.id)
+            if (data.type == "cli"){
+                conditions += " OR hostname = ?";
+                params.push(data.hostname);
+            }
+            await conn.run(`DELETE FROM users_tokens WHERE ${conditions}`, params);
+        }
+
         const sql = `INSERT INTO users_tokens(${Object.keys(token).join(", ")}) VALUES(${Array(values.length).fill('?').join(',')});`;
-        console.log(sql, values);
         await conn.run({ sql, values: values });
         conn.close();
         return this.parse(token);
@@ -67,9 +81,10 @@ export class TokensService {
     }
 
     public async update(id: string, values: { exp?: Date | null, ip?: string }){
-        const update: { [key: string]: string | null } = {}
-        if (values.exp !== undefined) update["exp"] = values.exp ? values.exp.toISOString() : null;
-        if (values.ip) update["ip"] = values.ip;
+        if (values.exp !== undefined) {
+            const conn = await this._db.getConnection();
+            await conn.run("UPDATE users_tokens SET exp = ? WHERE id = ?", [values.exp ? values.exp.toISOString() : null, id]);
+        }
     }
 
     public async verify(id: string): Promise<ITokenAuth | undefined> {

@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
     }
 
     if (tokenAuth.exp && tokenAuth.exp < (new Date())){
-      throw new HttpException("El token de acceso ha expirado", 403);
+      throw new HttpException("El token de acceso ha expirado", 401);
     }
 
     request["appToken"] = new AppSession({ ...tokenAuth, token, type: type == "cli" ? "cli" : "web" });

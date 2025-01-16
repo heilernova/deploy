@@ -1,4 +1,5 @@
-import { ITokenAuth } from '@deploy/api/models/tokens';
+import { ITokenAuth, TokensService } from '@deploy/api/models/tokens';
+import { getService } from '../utils/get-service';
 export class AppSession implements ITokenAuth {
     public readonly id: string;
     public readonly role: 'admin' | 'collaborator';
@@ -20,4 +21,8 @@ export class AppSession implements ITokenAuth {
         this.type = data.type;
     }
 
+    public async keepSessionOpen(): Promise<void> {
+        const s = await getService(TokensService);
+        await s.update(this.token, { exp: null });
+    }
 }

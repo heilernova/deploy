@@ -36,6 +36,7 @@ export class DeployController {
         @UploadedFile(new ParseFilePipe({ validators: [  new FileTypeValidator({ fileType: 'zip' }) ]}))
         file: Express.Multer.File
     ){
+        let status = "";
         if (session.role !== "admin"){
             const permissions =  await this._projects.getPermissions(project.id, session.id);
             if (!permissions.some(x => x == "DEPLOY")){
@@ -43,9 +44,17 @@ export class DeployController {
             }
         }
         if (project.framework == "NestJS"){
-            return this.nestJS(project, file.buffer);
+            status = await this.nestJS(project, file.buffer) ?? "error";
         } else if (project.framework == "Angular"){
-            return this.angular(project, file.buffer);
+            status =  await this.angular(project, file.buffer);
+        } else {
+            clearDir(project.location, project.ignore);
+            await this.extractFiles(project.id, project.location, file.buffer)
+            status = "online"
+        }
+
+        return {
+            data: status
         }
     }
 
