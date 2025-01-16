@@ -6,6 +6,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '@deploy/panel/auth/auth.service';
 import { Router } from '@angular/router';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-login-page',
@@ -13,7 +14,8 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
-    NzButtonModule
+    NzButtonModule,
+    NzModalModule
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
@@ -21,6 +23,7 @@ import { Router } from '@angular/router';
 export class LoginPageComponent {
   private readonly _auth = inject(AuthService);
   private readonly _message = inject(NzMessageService);
+  private readonly _modal = inject(NzModalService);
   private readonly _router = inject(Router);
 
   protected readonly credentials = new FormGroup({
@@ -44,8 +47,14 @@ export class LoginPageComponent {
     this.credentials.disable();
     this._auth.signIn(credentials)
     .then(() => {
-      this._message.success("Bienvenido.");
       this._router.navigate(["/"]);
+      this._modal.confirm({
+        nzTitle: "Bienvenido.",
+        nzContent: "¿Sea mantener la sesión abierta?",
+        nzOnOk: () => {
+          this._auth.keepSessionOpen();
+        }
+      })
     })
     .catch(err => {
       this._message.warning(err.error.message);
