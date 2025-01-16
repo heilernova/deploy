@@ -93,7 +93,11 @@
             Archivos a ignorar en la instalación
         </nz-form-label>
         <nz-form-control>
-            <nz-select nzMode="tags" formControlName="ignore"/>
+            <nz-select nzMode="tags" formControlName="ignore">
+                @for (item of listIgnoreFiles(); track $index) {
+                    <nz-option [nzLabel]="item" [nzValue]="item"/>
+                }
+            </nz-select>
         </nz-form-control>
     </nz-form-item>
 

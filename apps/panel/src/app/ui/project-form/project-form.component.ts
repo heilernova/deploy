@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -35,13 +35,15 @@ export class ProjectFormComponent {
     runningOn: new FormControl<RunningOn | null>(null),
     runtimeEnvironment: new FormControl<RuntimeEnvironment | null>(null),
     ignore: new FormControl<string[]>([]),
-    env: new FormControl<{ key: string, value: string }[]>([], { nonNullable: true, validators: Validators.required })
+    env: new FormControl<{ key: string, value: string }[]>([], { nonNullable: true })
   })
 
+  protected listIgnoreFiles = signal<string[]>([]);
   constructor(){
     effect(() => {
       const product = this.product();
       if (product){
+        this.listIgnoreFiles.set(structuredClone(product.ignore));
         const env: { key: string, value: string }[] = []
         Object.entries(product.env).forEach(item => {
           env.push({ key: item[0], value: item[1] });
@@ -52,10 +54,10 @@ export class ProjectFormComponent {
           processName: product.processName ?? "",
           framework: product.framework ?? null,
           runningOn: product.runningOn ?? null,
-          runtimeEnvironment: product?.runtimeEnvironment ?? null,
+          runtimeEnvironment: product.runtimeEnvironment ?? null,
           location: product.location ?? "",
-          ignore: product.ignore ?? [],
-          startupFile: product?.startupFile ?? "",
+          ignore: product.ignore,
+          startupFile: product.startupFile,
           env: env
         });
       }
