@@ -29,6 +29,10 @@ export class ProjectListPageComponent implements OnInit {
     })
   }
 
+  protected onUpdateList(): void {
+    this._projectsDataSource.getAll(true)
+  }
+
   protected onClickOpen(): void {
     this._nzModal.create({
       nzTitle: "Registrar proyecto",
