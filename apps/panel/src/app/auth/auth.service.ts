@@ -45,6 +45,15 @@ export class AuthService {
     });
   }
 
+  public keepSessionOpen(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._http.post("keep-session-open", undefined).subscribe({
+        next: () => resolve(),
+        error: err => reject(err)
+      })
+    })
+  }
+
   public logout(): void {
     localStorage.removeItem("app-token");
     this._session = null;
