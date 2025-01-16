@@ -13,10 +13,10 @@ export class ProjectsDataSourceService {
   private readonly _http = inject(HttpClient);
   private _list: Project[] = [];
   
-  public getAll(): Promise<Project[]>{
+  public getAll(refresh?: boolean): Promise<Project[]>{
     return new Promise((resolve, reject) => {
 
-      if (this._list.length > 0){
+      if (!refresh && this._list.length > 0){
         resolve(this._list);
         return;
       }
