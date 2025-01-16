@@ -32,7 +32,7 @@ export class AuthController {
 
         if (!cli){
             exp = new Date();
-            exp.setMinutes(exp.getMinutes() + 1);
+            exp.setHours(exp.getHours() + 8);
         }
 
         const token = await this._tokens.create({ 
