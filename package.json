@@ -2,7 +2,9 @@
   "name": "@deploy/source",
   "version": "0.0.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run-many --target=build --projects=panel,api && node ./scripts/build.js"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~19.0.0",
