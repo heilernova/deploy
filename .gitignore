@@ -45,3 +45,7 @@ Thumbs.db
 
 .env
 app.db
+
+v*.zip
+v*.tar
+v*.tar.gz
