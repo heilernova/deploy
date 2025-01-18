@@ -30,7 +30,13 @@
           "buildTarget": "api:build:development"
         },
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "api:build:production",
+          "fileReplacements": [
+            {
+              "replace": "apps/api/src/environments/environment.development.ts",
+              "with": "apps/api/src/environments/environment.ts"
+            }
+          ]
         }
       }
     },
