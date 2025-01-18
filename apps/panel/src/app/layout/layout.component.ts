@@ -4,6 +4,7 @@ import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer'
 import { DrawerUserMenuComponent } from '../ui/drawer-user-menu/drawer-user-menu.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { AuthService } from '../auth/auth.service';
+import { ConfigService } from '../config/config.service';
 
 @Component({
   selector: 'app-layout',
@@ -19,8 +20,10 @@ import { AuthService } from '../auth/auth.service';
 export class LayoutComponent {
   private readonly _nzDrawerService = inject(NzDrawerService);
   private readonly _auth = inject(AuthService);
+  private readonly _config = inject(ConfigService);
 
   public readonly user = signal<string>("");
+  public readonly version = this._config.version;
 
   constructor(){
     this.user.set(this._auth.getSession()?.name ?? "");
